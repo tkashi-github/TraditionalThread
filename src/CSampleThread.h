@@ -1,6 +1,6 @@
 /**
- * @file		CTraditionalThread.h
- * @brief		Traditional Thread class (MsgQueue + Thread)
+ * @file		CSampleThread.h
+ * @brief		Traditional Thread CSampleThread class (MsgQueue + Thread)
  * @author		Takashi Kashiwagi
  * @date		2019/7/15
  * @version     0.1.0
@@ -31,66 +31,15 @@
  * - 2019/07/15: Takashi Kashiwagi: v0.1.0
  */
 #pragma once
+#include "CTraditionalThread.h"
 
-#include <cstdio>
-#include <mutex>
-#include <thread>
-#include <cstdint>
-#include <cstddef>
-#include <memory>
-#include <condition_variable>
-#include "CLockedQueue.h"
-
-class CTraditionalThread
+class CSampleThread final : public CTraditionalThread
 {
 public:
-    CTraditionalThread();
-    CTraditionalThread(std::uint32_t NumOfQueueMsg);
-    virtual ~CTraditionalThread();
-public:
-	typedef enum{
-		enNotify = 0,
-		enQuit,
-		enMsgID_MAX,
-	}enMsgID_t;
+	CSampleThread();
+	~CSampleThread();
+	void StartThread() override;
 
-	/**
-	 * @breif Task Message Block
-	 */
-	typedef struct{
-		enMsgID_t       	enMsgId;
-		std::mutex   		*psyncMtx;
-		std::uint32_t		*ptrDataForSrc;
-		std::uint32_t		*ptrDataForDst;
-		std::uint32_t       param[16];
-	}stTaskMsgBlock_t;
 protected:
-	bool m_bRunning;
-
-	std::mutex m_SyncMtx;
-	std::shared_ptr<std::thread> m_pThread;
-	LockedQueue<stTaskMsgBlock_t> *m_pMsgQueue;
-
-	virtual bool GetMsg(stTaskMsgBlock_t& stTaskMsg) final;
-	//virtual bool pGetMsg(stTaskMsgBlock_t& stTaskMsg) final;
-
-	/**
-	 * @brief Please Override
-	 */
-	virtual void MainLoop() = 0;
-
-public:
-
-	/**
-	 * @brief Please Override
-	 */
-	virtual void StartThread() = 0;
-
-    /**
-     * @brief no override
-     */
-	virtual void StopThread() final;
-	virtual void PostMsgQuitThread() final;
-	virtual bool PostMsg(stTaskMsgBlock_t& stTaskMsg) final;
-	virtual void WaitStop() final;
+	void MainLoop() override;
 };
