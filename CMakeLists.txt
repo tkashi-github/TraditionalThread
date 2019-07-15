@@ -13,7 +13,7 @@ set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -DUNIT_TEST -I../src -Wall -Wextra -Wno-long
 set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -DUNIT_TEST -I../src -Wall -Wextra -Wno-long-long -pedantic -pthread")
 
 add_executable(utest
-  ./utest/utest.cpp
+  ./src/utest.cpp
   ./src/CTraditionalThread.cpp
 )
 
